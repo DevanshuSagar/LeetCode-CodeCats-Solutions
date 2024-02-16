@@ -1,0 +1,52 @@
+class Solution {
+public:
+    bool solve(int x, string &str, vector<int> &prev) {
+        int n = prev.size();
+        // for (auto n1: prev) {
+        //     cout << n1 << " ";
+        // }
+        // cout << endl;
+        if (n >= 3) {
+            long prevSum = prev[n-3];
+            prevSum += prev[n-2];
+            if (prevSum != prev[n-1])
+                return false;
+        }
+    
+        if (x == str.length()) {
+            if (n>=3) return true;
+            else return false;
+        }
+
+        long long num = 0;
+        for (int i=x;i<str.length();i++) {
+            // Can't have leading zeros
+            if (i!=x && str[x] == '0') 
+                return false;
+            
+            num = num*10 + (str[i]-'0');
+
+            // Can't have num out of bound of signed int
+            if (num > INT_MAX) {
+                return false;
+            }
+
+            prev.push_back(num);
+            if (solve(i+1, str, prev))
+                return true;
+            prev.pop_back();
+        }
+        return false;
+    }
+    
+    vector<int> splitIntoFibonacci(string num) {
+        int n = num.length();
+        if (n <= 2) return {};
+
+        vector<int> prev;
+        if (solve(0, num, prev)) {
+            return prev;
+        }
+        return {};
+    }
+};
