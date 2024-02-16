@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int dfs(int i, int k, vector<int>&arr, vector<int> &dp) {
+        // if (i >= arr.size()) { return 0; }
+        if (dp[i] != -1) { return dp[i]; }
+        int cur_max = 0;
+        int ans = 0;
+        for (int j=i;j<k+i && j<arr.size();j++) {
+            cur_max = max(cur_max, arr[j]);
+            ans = max(ans, ((j-i+1) * cur_max) + dfs(j+1, k, arr, dp));
+        }
+        dp[i] = ans;
+        return ans;
+    }
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        vector<int> dp(arr.size()+1, -1);
+        return dfs(0, k, arr, dp);
+    }
+};
